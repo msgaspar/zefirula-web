@@ -1,10 +1,16 @@
 import Header from '../../components/Header'
-import { Box, Button, Flex, Icon, Heading, Table, Thead, Tr, Th, Checkbox, Tbody, Td, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, Icon, Heading, Table, Thead, Tr, Th, Checkbox, Tbody, Td, Text, useBreakpointValue } from '@chakra-ui/react'
 import { Sidebar } from '../../components/Sidebar'
 import { RiAddLine } from 'react-icons/ri'
 import { Pagination } from '../../components/Pagination'
+import Link from 'next/link'
 
 export default function LeagueList() {
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    lg: true
+  })
+
   return (
     <Box>
       <Header />
@@ -16,15 +22,17 @@ export default function LeagueList() {
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">Ligas</Heading>
 
-            <Button
-              as="a"
-              size="sm"
-              fontSize="sm"
-              colorScheme="teal"
-              leftIcon={<Icon as={RiAddLine} fontSize="20" />}
-            >
-              Criar nova
-            </Button>
+            <Link href="/leagues/create" passHref>
+              <Button
+                as="a"
+                size="sm"
+                fontSize="sm"
+                colorScheme="teal"
+                leftIcon={<Icon as={RiAddLine} fontSize="20" />}
+                >
+                Criar nova
+              </Button>
+            </Link>
           </Flex>
 
           <Table colorScheme="whiteAlpha">
