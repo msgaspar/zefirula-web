@@ -30,12 +30,11 @@ export default function Home() {
       w="100vw"
       minHeight="100vh"
       align="center"
-      justify="center"
       direction="column"
     >
       <Box flex="1"></Box>
       <Stack align="center" spacing="8" m="2">
-        <Box w={180}>
+        <Box w={[180, 240]}>
           <Image src="/images/logo.png" alt="Logo"/>
         </Box>
       
@@ -68,7 +67,7 @@ export default function Home() {
           <Button
             type="submit"
             mt="6"
-            colorScheme="orange"
+            colorScheme="teal"
             size="lg"
             isLoading={formState.isSubmitting}  
           >Entrar</Button>

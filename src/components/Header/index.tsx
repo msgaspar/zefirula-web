@@ -16,11 +16,12 @@ export default function Header() {
       as="header"
       w="100%"
       maxWidth={1480}
-      h="20"
+      h="fit-content"
       mx="auto"
       mt="4"
-      px="6"
+      px={["16", "16", "16", "8"]}
       align="center"  
+      justify={['space-between', 'space-between', 'space-between', 'flex-start']}
     >
 
     { !isWideVersion && (
@@ -34,7 +35,7 @@ export default function Header() {
       />
     )}
 
-    <Logo />
+      <Logo />
 
     </Flex>
   )
