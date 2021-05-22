@@ -4,7 +4,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Link from 'next/link'
 
-import { Input } from '../../components/Form/Input'
+import { FormInput } from '../../components/Form/FormInput'
 import Header from '../../components/Header'
 import { Sidebar } from '../../components/Sidebar'
 
@@ -28,29 +28,31 @@ export default function CreateLeague() {
   }
 
   return (
-    <Box>
+    <Flex direction="column" bg="gray.50" minHeight="100vh">
       <Header />
 
-      <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
+      <Flex w="100%" my="6" flex="1" maxWidth={1480} mx="auto" px={[ "2", "4", "6"]}>
         <Sidebar />
 
         <Box
           as="form"
           flex="1"
-          borderRadius={8}
-          bg="gray.800"
+          bg="white"
+          border="1px"
+          borderColor="gray.200"
           p={["6", "8"]}
           onSubmit={handleSubmit(handleCreateLeague)}
           >
-          <Heading size="lg" fontWeight="normal">Criar nova liga</Heading>
+          <Heading size="lg" fontWeight="400">Criar nova liga</Heading>
 
-          <Divider my="6" borderColor="gray.700" />
-
-          <VStack spacing="8">
-            <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
-              <Input
+          <VStack spacing="8" mt="12">
+            <SimpleGrid minChildWidth="200px" spacing={["6", "8"]} w="100%">
+              <FormInput
                 name="name"
+                borderColor="gray.400"
+                fontSize={['sm', 'md']}
                 label="Nome da liga"
+                placeholder="Digite o nome da nova liga"
                 error={errors.name}
                 {...register('name')} />
             </SimpleGrid>
@@ -59,7 +61,7 @@ export default function CreateLeague() {
           <Flex mt="8" justify="flex-end">
             <HStack spacing="4">
               <Link href="/leagues" passHref>
-                <Button colorScheme="whiteAlpha">Cancelar</Button>
+                <Button colorScheme="blackAlpha" variant="outline">Cancelar</Button>
               </Link>
               <Button
                 colorScheme="teal"
@@ -70,6 +72,6 @@ export default function CreateLeague() {
           </Flex>
         </Box>
       </Flex>
-    </Box>
+    </Flex>
   )
 }

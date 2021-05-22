@@ -6,33 +6,25 @@ import { Pagination } from '../../components/Pagination'
 import Link from 'next/link'
 
 export default function LeagueList() {
-  const isWideVersion = useBreakpointValue({
-    base: false,
-    lg: true
-  })
-
   return (
     <Flex direction="column" minHeight="100vh" bg="gray.50">
       <Header />
 
-      <Flex w="100%" my="6" flex="1" maxWidth={1480} mx="auto" px="6">
+      <Flex w="100%" my="6" flex="1" maxWidth={1480} mx="auto" px={[ "2", "4", "6"]}>
         <Sidebar />
 
-        <Flex direction="column" w="100%">
+        <Flex direction="column" flex="1" w="100%">
           <Flex
-            px={["6", "10"]}
+            px={["6", "8"]}
             mb="8"
             justify="space-between"
             align={["flex-start", "center"]}
             direction={['column', 'row']}>
-            <Heading size="xl" fontWeight="bold" my={[6, 6, 8, 0]}>Ligas</Heading>
+            <Heading size="xl" fontWeight="600" my={[6, 6, 8, 0]}>Ligas</Heading>
 
             <Link href="/leagues/create" passHref>
               <Button
                 as="a"
-                size="sm"
-                py="5"
-                fontSize="sm"
                 colorScheme="teal"
                 leftIcon={<Icon as={RiAddLine} fontSize="20" />}
                 >
@@ -46,13 +38,12 @@ export default function LeagueList() {
             direction="column"
             flex="1"
             bg="white"
-            p="8"
+            p={["4", "6", "8"]}
             border="1px"
             borderColor="gray.200"
-            boxShadow="md"
           >
             <Box flex="1" w="100%" overflowX="auto" whiteSpace="nowrap">
-              <Table colorScheme="blackAlpha" fontSize={["sm", "md"]}>
+              <Table colorScheme="blackAlpha" fontSize={["xs", "sm"]}>
                 <Thead>
                   <Tr>
                     <Th>Nome</Th>

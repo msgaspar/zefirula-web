@@ -19,10 +19,11 @@ export default function Header() {
       h="fit-content"
       mx="auto"
       mt="4"
-      px={["16", "16", "16", "8"]}
+      px="12"
       align="center"  
       justify={['space-between', 'space-between', 'space-between', 'flex-start']}
     >
+    <Logo />
 
     { !isWideVersion && (
       <IconButton
@@ -35,7 +36,6 @@ export default function Header() {
       />
     )}
 
-      <Logo />
 
     </Flex>
   )

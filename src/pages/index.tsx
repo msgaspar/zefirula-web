@@ -2,7 +2,7 @@ import { Flex, Button, Stack, Image, Box } from '@chakra-ui/react'
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Input } from '../components/Form/Input'
+import { LoginInput } from '../components/Form/LoginInput'
 
 type SignInFormData = {
   username: string;
@@ -51,12 +51,12 @@ export default function Home() {
           <Stack
             spacing="4"
           >
-            <Input
+            <LoginInput
               name="username"
               label="Usuário"
               error={errors.username}
               {...register("username")} />
-            <Input
+            <LoginInput
               name="password"
               type="password"
               label="Senha"

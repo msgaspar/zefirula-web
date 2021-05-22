@@ -7,7 +7,6 @@ export function SidebarNav() {
   return (
     <Stack spacing="12" align="flex-start" pt="14">
         <NavSection title="GERAL">
-          <NavLink icon={RiDashboardLine} href="/dashboard">Dashboard</NavLink>
           <NavLink icon={RiTrophyLine} href="/leagues">Ligas</NavLink>
         </NavSection>
       </Stack>

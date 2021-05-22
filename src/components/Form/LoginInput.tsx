@@ -3,13 +3,13 @@ import { FieldError } from 'react-hook-form'
 import { forwardRef, ForwardRefRenderFunction } from 'react'
 
 
-interface InputProps extends ChakraInputProps {
+interface LoginInputProps extends ChakraInputProps {
   name: string;
   label?: string;
   error?: FieldError;
 }
 
-const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({ name, label, error, ...rest }, ref) => {
+const InputBase: ForwardRefRenderFunction<HTMLInputElement, LoginInputProps> = ({ name, label, error, ...rest }, ref) => {
   return (
     <FormControl isInvalid={!!error}>
       { !!label && <FormLabel htmlFor="email">{label}</FormLabel> }
@@ -37,4 +37,4 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({ nam
   )
 }
 
-export const Input = forwardRef(InputBase)
+export const LoginInput = forwardRef(InputBase)
