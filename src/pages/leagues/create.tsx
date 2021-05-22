@@ -3,10 +3,14 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Link from 'next/link'
+import { QueryClient, useMutation } from 'react-query'
 
 import { FormInput } from '../../components/Form/FormInput'
 import Header from '../../components/Header'
 import { Sidebar } from '../../components/Sidebar'
+import { api } from '../../services/api'
+import { queryClient } from '../../services/queryClient'
+import { useRouter } from 'next/router'
 
 type CreateLeagueFormData = {
   name: string;
@@ -17,6 +21,18 @@ const createLeagueFormSchema = yup.object().shape({
 })
 
 export default function CreateLeague() {
+  const router = useRouter()
+
+  const createLeague = useMutation(async (league: CreateLeagueFormData) => {
+    await api.post('leagues', {
+      name: league.name
+    })
+  }, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('leagues')
+    }
+  })
+
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(createLeagueFormSchema)
   })
@@ -24,7 +40,9 @@ export default function CreateLeague() {
   const { errors } = formState;
 
   const handleCreateLeague: SubmitHandler<CreateLeagueFormData> = async (values) => {
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    await createLeague.mutateAsync(values)
+
+    router.push('/leagues')
   }
 
   return (

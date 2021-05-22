@@ -24,7 +24,9 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, LoginInputProps> = (
           bgColor: 'white'
         }}
         size="lg"
-        autoComplete="off"
+        _autofill={{
+          WebkitBoxShadow: '0 0 10px 30px white inset'
+        }}
         {...rest}
         ref={ref}
       />
