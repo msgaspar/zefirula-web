@@ -12,7 +12,7 @@ interface LoginInputProps extends ChakraInputProps {
 const InputBase: ForwardRefRenderFunction<HTMLInputElement, LoginInputProps> = ({ name, label, error, ...rest }, ref) => {
   return (
     <FormControl isInvalid={!!error}>
-      { !!label && <FormLabel htmlFor="email">{label}</FormLabel> }
+      { !!label && <FormLabel fontSize="md" htmlFor={name}>{label}</FormLabel> }
 
       <ChakraInput
         name={name}
@@ -23,7 +23,7 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, LoginInputProps> = (
         _hover={{
           bgColor: 'white'
         }}
-        size="lg"
+        size="md"
         _autofill={{
           WebkitBoxShadow: '0 0 10px 30px white inset'
         }}

@@ -34,14 +34,14 @@ export default function Home() {
     >
       <Box flex="1"></Box>
       <Stack align="center" spacing="8" m="2">
-        <Box w={[180, 240]}>
+        <Box w={[180, 220]}>
           <Image src="/images/logo.png" alt="Logo"/>
         </Box>
       
         <Flex
           as="form"
-          width="100%"
-          maxWidth={360}
+          width={["100%", "330px"]}
+          // maxWidth={360}
           bg="gray.200"
           p="8"
           borderRadius={8}
@@ -49,7 +49,7 @@ export default function Home() {
           onSubmit={handleSubmit(handleSignIn)}
         >
           <Stack
-            spacing="4"
+            spacing="3"
           >
             <LoginInput
               name="username"
@@ -68,7 +68,7 @@ export default function Home() {
             type="submit"
             mt="6"
             colorScheme="teal"
-            size="lg"
+            size="md"
             isLoading={formState.isSubmitting}  
           >Entrar</Button>
         </Flex>
