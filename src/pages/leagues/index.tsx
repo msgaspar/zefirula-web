@@ -74,14 +74,22 @@ export default function LeagueList() {
                 </Thead>
                 <Tbody>
                   {data.map(league => (
-                  <Tr key={league.id}>
+                  <Link href={`/leagues/${league.id}`} passHref>
+                    <Tr
+                      borderLeft="5px solid white"
+                      _hover={{
+                        cursor: "pointer",
+                        boxShadow: "md",
+                        borderLeftColor: "orange"
+                      }}
+                      key={league.id}>
                     <Td>
                       <Text fontWeight="600">{league.name}</Text>
                     </Td>
                     <Td>
                       {league.clubs_count}
                     </Td>
-                  </Tr>
+                  </Tr></Link>
                   ))}
                 </Tbody>
               </Table>
