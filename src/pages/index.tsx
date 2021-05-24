@@ -3,8 +3,11 @@ import { SubmitHandler, useForm, useFormState } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { LoginInput } from '../components/Form/LoginInput'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
+import { Router, useRouter } from 'next/router'
+import { api } from '../services/api'
+import { parseCookies } from 'nookies'
 
 type SignInFormData = {
   username: string;
@@ -21,6 +24,8 @@ export default function Home() {
     resolver: yupResolver(signInFormSchema)
   })
 
+  const router = useRouter()
+
   const { errors } = formState
 
   const { signIn } = useContext(AuthContext)
@@ -28,6 +33,17 @@ export default function Home() {
   const handleSignIn: SubmitHandler<SignInFormData> = async (values) => {
     await signIn(values)
   }
+
+  useEffect(() => {
+    const { 'zf.token': token } = parseCookies()
+
+    if (token) {
+      api.get('/me')
+        .then(response => {
+          router.push('/leagues')
+        })
+    }
+  }, [])
 
   return (
     <Flex
@@ -38,7 +54,7 @@ export default function Home() {
     >
       <Box flex="1"></Box>
       <Stack align="center" spacing="8" m="2">
-        <Box w={[180, 220]}>
+        <Box w={[140, 180]}>
           <Image src="/images/logo.png" alt="Logo"/>
         </Box>
       

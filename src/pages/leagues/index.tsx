@@ -12,7 +12,6 @@ import { AuthContext } from '../../contexts/AuthContext'
 
 export default function LeagueList() {
   const { data, isLoading, isFetching, error } = useLeagues();
-  const { user } = useContext(AuthContext)
 
   return (
     <Flex direction="column" minHeight="100vh" bg="gray.50">

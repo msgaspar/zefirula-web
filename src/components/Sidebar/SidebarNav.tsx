@@ -1,13 +1,18 @@
-import { Stack } from '@chakra-ui/react'
-import { RiDashboardLine, RiGitMergeLine, RiInputMethodLine, RiTrophyLine } from 'react-icons/ri'
+import { Stack, Button } from '@chakra-ui/react'
+import { RiLogoutBoxLine, RiTrophyLine } from 'react-icons/ri'
 import { NavSection } from './NavSection'
 import { NavLink } from './NavLink'
+import { useContext } from 'react'
+import { AuthContext } from '../../contexts/AuthContext'
 
 export function SidebarNav() {
+  const { signOut } = useContext(AuthContext)
+
   return (
     <Stack spacing="12" align="flex-start" pt="14">
         <NavSection title="GERAL">
           <NavLink icon={RiTrophyLine} href="/leagues">Ligas</NavLink>
+          <NavLink icon={RiLogoutBoxLine} onClick={signOut} href="#">Logout</NavLink>
         </NavSection>
       </Stack>
   )
