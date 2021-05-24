@@ -3,6 +3,8 @@ import { SubmitHandler, useForm, useFormState } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { LoginInput } from '../components/Form/LoginInput'
+import { useContext } from 'react'
+import { AuthContext } from '../contexts/AuthContext'
 
 type SignInFormData = {
   username: string;
@@ -21,8 +23,10 @@ export default function Home() {
 
   const { errors } = formState
 
+  const { signIn } = useContext(AuthContext)
+
   const handleSignIn: SubmitHandler<SignInFormData> = async (values) => {
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    await signIn(values)
   }
 
   return (
@@ -41,7 +45,6 @@ export default function Home() {
         <Flex
           as="form"
           width={["100%", "330px"]}
-          // maxWidth={360}
           bg="gray.200"
           p="8"
           borderRadius={8}

@@ -4,13 +4,15 @@ import { Sidebar } from '../../components/Sidebar'
 import { RiAddLine } from 'react-icons/ri'
 import { Pagination } from '../../components/Pagination'
 import Link from 'next/link'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { api } from '../../services/api'
 import { useLeagues } from '../../services/hooks/useLeagues'
+import { AuthContext } from '../../contexts/AuthContext'
 
 export default function LeagueList() {
   const { data, isLoading, isFetching, error } = useLeagues();
+  const { user } = useContext(AuthContext)
 
   return (
     <Flex direction="column" minHeight="100vh" bg="gray.50">

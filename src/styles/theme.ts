@@ -26,7 +26,7 @@ export const theme = extendTheme({
     global: {
       "*": {
         _selection: {
-          background: 'teal.300'
+          background: 'orange.200'
         }
       },
       body: {

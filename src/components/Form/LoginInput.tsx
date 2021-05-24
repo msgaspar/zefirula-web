@@ -17,13 +17,14 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, LoginInputProps> = (
       <ChakraInput
         name={name}
         id={name}
-        focusBorderColor="orange.500"
+        focusBorderColor="orange.300"
         bgColor="white"
-        variant="filled"
+        variant="outline"
         _hover={{
           bgColor: 'white'
         }}
         size="md"
+        autoComplete="off"
         _autofill={{
           WebkitBoxShadow: '0 0 10px 30px white inset'
         }}
