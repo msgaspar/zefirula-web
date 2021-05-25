@@ -6,17 +6,46 @@ import Header from '../../components/Header'
 import { Sidebar } from '../../components/Sidebar'
 import Link from 'next/link'
 import { RiAddLine } from 'react-icons/ri';
-
+import { FormInput } from '../../components/Form/FormInput';
 
 function League() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
+  const [isAddingClub, setIsAddingClub] = useState(false)
+  const [searchResults, setSearchResults] = useState([])
   const [leagueData, setLeagueData] = useState({
     id: '',
     name: '',
     round: '',
     clubs: []
   })
+
+  const handleSearch = (e) => {
+    e.preventDefault()
+    const q = e.target[0].value
+    api.get('clubs/search', {
+      params: {
+        q
+      }
+    })
+    .then(response => setSearchResults([...response.data.slice(0, 10)]))
+  }
+  
+
+  const addClub = () => {
+    setIsAddingClub(true)
+  }
+
+  const handleAddClub = (id: string) => {
+    console.log(id)
+    return () => {
+      console.log(id)
+      api.post(`leagues/${leagueData.id}`, {
+        clubId: id
+      })
+      router.reload()
+    }
+  }
   
   useEffect(() => {
     if(router.query.leagueId) {
@@ -49,15 +78,16 @@ function League() {
                 Rodada {leagueData.round} 
               </Heading>
             </Stack>
-            <Link href={`/leagues/${leagueData.id}/create`} passHref>
+            
               <Button
                 as="a"
                 colorScheme="teal"
+                onClick={addClub}
                 leftIcon={<Icon as={RiAddLine} fontSize="20" />}
                 >
                 Adicionar time
               </Button>
-            </Link>
+            
           </Flex>
 
           <Flex
@@ -72,6 +102,47 @@ function League() {
               <Flex justify="center" h="100%" align="center"> 
                 <Spinner />
               </Flex>
+            ) : isAddingClub ? (
+              <>
+              <Box as="form" onSubmit={handleSearch}>
+                <FormInput
+                  name="Buscar time"
+                  placeholder="Digite o nome do time"
+                  borderColor="gray.300"
+                  />
+              </Box>
+              <Table mt="5">
+                <Thead>
+                  <Tr>
+                    <Th>Nome</Th>
+                    <Th>Cartoleiro</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                { searchResults.map(item => (
+                  <Tr 
+                    key={item.id}
+                    onClick={handleAddClub(item.id)}
+                    borderLeft="5px solid white"
+                    _hover={{
+                      cursor: "pointer",
+                      boxShadow: "md",
+                      borderLeftColor: "green.500",
+                    }}
+                  >
+                    <Td>
+                      {item.name}
+                    </Td>
+                    <Td>
+                      {item.cartoleiro}
+                    </Td>
+                  </Tr>
+                  )
+                )}
+                
+                </Tbody>
+              </Table>
+              </>
             ) : (
               <Box flex="1" w="100%" overflowX="auto" whiteSpace="nowrap">
               <Table colorScheme="blackAlpha" fontSize={["xs", "sm"]}>
@@ -87,6 +158,7 @@ function League() {
                   {leagueData.clubs.map(club => (
                     <Tr
                       borderLeft="5px solid white"
+                      key={club.id}
                     >
                     <Td>
                       <Text fontWeight="600">{club.name}</Text>

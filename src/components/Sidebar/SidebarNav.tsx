@@ -1,4 +1,4 @@
-import { Stack, Button } from '@chakra-ui/react'
+import { Stack, Button, Link, Icon, Text } from '@chakra-ui/react'
 import { RiLogoutBoxLine, RiTrophyLine } from 'react-icons/ri'
 import { NavSection } from './NavSection'
 import { NavLink } from './NavLink'
@@ -12,7 +12,10 @@ export function SidebarNav() {
     <Stack spacing="12" align="flex-start" pt="14">
         <NavSection title="GERAL">
           <NavLink icon={RiTrophyLine} href="/leagues">Ligas</NavLink>
-          <NavLink icon={RiLogoutBoxLine} onClick={signOut} href="#">Logout</NavLink>
+          <Link display="flex" onClick={signOut} align="center">
+            <Icon as={RiLogoutBoxLine} fontSize="20" mt="0.5"/>
+            <Text ml="4" fontWeight="600">Logout</Text>
+          </Link>
         </NavSection>
       </Stack>
   )
