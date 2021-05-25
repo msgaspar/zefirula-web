@@ -2,7 +2,7 @@ import { AppProps } from 'next/app'
 import { ChakraProvider } from '@chakra-ui/react'
 import { theme } from '../styles/theme'
 import { SidebarDrawerProvider } from '../contexts/SidebarDrawerContext'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClientProvider } from 'react-query'
 import { queryClient } from '../services/queryClient'
 import { AuthProvider } from '../contexts/AuthContext'
 
