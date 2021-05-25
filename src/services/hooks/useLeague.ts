@@ -8,6 +8,6 @@ export function useLeague(leagueId: string) {
 }
 
 const getLeagueById = async (id) => {
-  const { data } = await api.get(`http://localhost:3333/leagues/${id}`)
+  const { data } = await api.get(`leagues/${id}`)
   return data
 }

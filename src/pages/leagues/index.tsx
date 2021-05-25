@@ -1,14 +1,15 @@
 import Header from '../../components/Header'
 import { Box, Button, Flex, Icon, Heading, Table, Thead, Tr, Th, Checkbox, Tbody, Td, Text, Spinner } from '@chakra-ui/react'
 import { Sidebar } from '../../components/Sidebar'
-import { RiAddLine } from 'react-icons/ri'
+import { RiAddLine, RiDeleteBin2Line } from 'react-icons/ri'
 import { Pagination } from '../../components/Pagination'
 import Link from 'next/link'
 import { useContext, useEffect } from 'react'
-import { useQuery } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import { api } from '../../services/api'
 import { useLeagues } from '../../services/hooks/useLeagues'
 import { AuthContext } from '../../contexts/AuthContext'
+import { queryClient } from '../../services/queryClient'
 
 export default function LeagueList() {
   const { data, isLoading, isFetching, error } = useLeagues();

@@ -5,8 +5,10 @@ import { Button, Flex, Heading, Stack, Icon, Spinner, Box, Table, Thead, Th, Td,
 import Header from '../../components/Header'
 import { Sidebar } from '../../components/Sidebar'
 import Link from 'next/link'
-import { RiAddLine } from 'react-icons/ri';
+import { RiAddLine, RiDeleteBack2Line, RiDeleteBin2Line, RiDeleteBin3Line, RiDeleteBin4Line, RiDeleteBin5Line, RiDeleteBin7Line } from 'react-icons/ri';
 import { FormInput } from '../../components/Form/FormInput';
+import { useMutation } from 'react-query';
+import { queryClient } from '../../services/queryClient';
 
 function League() {
   const router = useRouter()
@@ -20,9 +22,24 @@ function League() {
     clubs: []
   })
 
+  const deleteLeague = useMutation(async (leagueId: string) => {
+    await api.delete(`leagues/${leagueId}`)
+  }, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('leagues')
+    }
+  })
+
+  const handleDeleteLeague = (leagueId) => {
+    return async () => {
+      await deleteLeague.mutateAsync(leagueId)
+      router.push('/leagues')
+    }
+  }
+
   const handleSearch = (e) => {
     e.preventDefault()
-    const q = e.target[0].value
+    const q = encodeURIComponent(e.target[0].value)
     api.get('clubs/search', {
       params: {
         q
@@ -37,19 +54,24 @@ function League() {
   }
 
   const handleAddClub = (id: string) => {
-    console.log(id)
     return () => {
-      console.log(id)
       api.post(`leagues/${leagueData.id}`, {
-        clubId: id
-      })
-      router.reload()
+        clubId: String(id)
+      }).then(() => router.reload())
+    }
+  }
+
+  const handleRemoveClub = (id: string) => {
+    return () => {
+      api.delete(`leagues/${leagueData.id}/${id}`).then(() =>
+        router.reload()
+      )
     }
   }
   
   useEffect(() => {
     if(router.query.leagueId) {
-      api.get(`http://localhost:3333/leagues/${router.query.leagueId}`)
+      api.get(`leagues/${router.query.leagueId}`)
         .then(response => setLeagueData({id: router.query.leagueId, ...response.data}))
         .then(() => setIsLoading(false))
     }
@@ -78,16 +100,13 @@ function League() {
                 Rodada {leagueData.round} 
               </Heading>
             </Stack>
-            
               <Button
-                as="a"
                 colorScheme="teal"
                 onClick={addClub}
                 leftIcon={<Icon as={RiAddLine} fontSize="20" />}
                 >
                 Adicionar time
               </Button>
-            
           </Flex>
 
           <Flex
@@ -152,6 +171,7 @@ function League() {
                     <Th>Cartoleiro</Th>
                     <Th>Pontos</Th>
                     <Th>Pontos s/ capitão</Th>
+                    <Th></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -172,12 +192,33 @@ function League() {
                     <Td>
                       <Text fontWeight="600">{club.captain_score}</Text>
                     </Td>
+                    <Td>
+                      <Icon
+                        as={RiDeleteBin2Line}
+                        onClick={handleRemoveClub(club.id)}
+                        fontSize="18"
+                        _hover={{
+                          cursor: "pointer"
+                        }}
+                        color="red.500" 
+                      />
+                    </Td>
                   </Tr>
                   ))}
                 </Tbody>
               </Table>
             </Box>
             )}
+
+            <Button
+                colorScheme="red"
+                variant="outline"
+                alignSelf="flex-end"
+                onClick={handleDeleteLeague(leagueData.id)}
+                leftIcon={<Icon as={RiDeleteBin7Line} fontSize="20" />}
+                >
+                Excluir liga
+              </Button>
 
           </Flex>
 
