@@ -170,6 +170,7 @@ function League() {
                     <Th></Th>
                     <Th>Nome</Th>
                     <Th>Cartoleiro</Th>
+                    <Th>ID</Th>
                     <Th>Pontos</Th>
                     <Th>Pontos s/ capitão</Th>
                     <Th></Th>
@@ -184,7 +185,7 @@ function League() {
                       borderLeft="5px solid white"
                       key={club.id}
                     >
-                    <Td>
+                    <Td p="0">
                       <Image boxSize="28px" src={club.badgeImgUrl} userSelect="none" />
                     </Td>
                     <Td>
@@ -192,6 +193,9 @@ function League() {
                     </Td>
                     <Td>
                       <Text fontWeight="600">{club.cartoleiro}</Text>
+                    </Td>
+                    <Td>
+                      <Text fontWeight="600">{club.id}</Text>
                     </Td>
                     <Td>
                       <Text fontWeight="600">{club.score}</Text>
