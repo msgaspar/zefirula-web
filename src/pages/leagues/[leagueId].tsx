@@ -192,16 +192,16 @@ function League() {
                       <Text fontWeight="600">{club.name}</Text>
                     </Td>
                     <Td>
-                      <Text fontWeight="600">{club.cartoleiro}</Text>
+                      <Text fontWeight="400">{club.cartoleiro}</Text>
                     </Td>
                     <Td>
-                      <Text fontWeight="600">{club.id}</Text>
+                      <Text fontWeight="400">{club.id}</Text>
                     </Td>
                     <Td>
-                      <Text fontWeight="600">{club.score}</Text>
+                      <Text fontWeight="400">{club.score}</Text>
                     </Td>
                     <Td>
-                      <Text fontWeight="600">{club.captain_score}</Text>
+                      <Text fontWeight="400">{club.captain_score}</Text>
                     </Td>
                     <Td>
                       <Icon
