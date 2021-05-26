@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react';
 import { api } from '../../services/api';
-import { Button, Flex, Heading, Stack, Icon, Spinner, Box, Table, Thead, Th, Td, Text, Tbody, Tr, Image } from '@chakra-ui/react'
+import { Button, Flex, Heading, Stack, Icon, Spinner, Box, Table, Thead, Th, Td, Text, Tbody, Tr, Image, Avatar } from '@chakra-ui/react'
 import Header from '../../components/Header'
 import { Sidebar } from '../../components/Sidebar'
 import Link from 'next/link'
@@ -167,6 +167,7 @@ function League() {
               <Table colorScheme="blackAlpha" fontSize={["xs", "sm"]}>
                 <Thead>
                   <Tr>
+                    <Th></Th>
                     <Th>Nome</Th>
                     <Th>Cartoleiro</Th>
                     <Th>Pontos</Th>
@@ -180,6 +181,9 @@ function League() {
                       borderLeft="5px solid white"
                       key={club.id}
                     >
+                    <Td>
+                      <Image boxSize="28px" src={club.badgeImgUrl} userSelect="none" />
+                    </Td>
                     <Td>
                       <Text fontWeight="600">{club.name}</Text>
                     </Td>
@@ -209,16 +213,20 @@ function League() {
               </Table>
             </Box>
             )}
+            {
+            !isAddingClub && (
 
-            <Button
-                colorScheme="red"
-                variant="outline"
-                alignSelf="flex-end"
-                onClick={handleDeleteLeague(leagueData.id)}
-                leftIcon={<Icon as={RiDeleteBin7Line} fontSize="20" />}
-                >
+              <Button
+              colorScheme="red"
+              variant="outline"
+              alignSelf="flex-end"
+              onClick={handleDeleteLeague(leagueData.id)}
+              leftIcon={<Icon as={RiDeleteBin7Line} fontSize="20" />}
+              >
                 Excluir liga
               </Button>
+            )
+            }
 
           </Flex>
 
