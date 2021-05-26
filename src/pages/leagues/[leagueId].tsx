@@ -45,7 +45,7 @@ function League() {
         q
       }
     })
-    .then(response => setSearchResults([...response.data.slice(0, 10)]))
+    .then(response => setSearchResults([...response.data]))
   }
   
 
@@ -176,7 +176,10 @@ function League() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {leagueData.clubs.map(club => (
+                  
+                  {leagueData.clubs.map(club => {
+                    console.log(club.badgeImgUrl)
+                    return (
                     <Tr
                       borderLeft="5px solid white"
                       key={club.id}
@@ -208,7 +211,7 @@ function League() {
                       />
                     </Td>
                   </Tr>
-                  ))}
+                  )})}
                 </Tbody>
               </Table>
             </Box>
