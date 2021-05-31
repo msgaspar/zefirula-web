@@ -198,10 +198,10 @@ function League() {
                       <Text fontWeight="400">{club.id}</Text>
                     </Td>
                     <Td>
-                      <Text fontWeight="400">{club.score}</Text>
+                      <Text fontWeight="400">{Number(club.score).toLocaleString('pt-br')}</Text>
                     </Td>
                     <Td>
-                      <Text fontWeight="400">{Number(club.score - club.captain_score).toFixed(2)}</Text>
+                      <Text fontWeight="400">{Number(club.score - club.captain_score).toLocaleString('pt-br')}</Text>
                     </Td>
                     <Td>
                       <Icon
