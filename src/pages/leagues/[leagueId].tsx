@@ -201,7 +201,7 @@ function League() {
                       <Text fontWeight="400">{club.score}</Text>
                     </Td>
                     <Td>
-                      <Text fontWeight="400">{club.captain_score}</Text>
+                      <Text fontWeight="400">{Number(club.score - club.captain_score).toFixed(2)}</Text>
                     </Td>
                     <Td>
                       <Icon
