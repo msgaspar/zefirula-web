@@ -1,4 +1,4 @@
-import { extendTheme } from '@chakra-ui/react'
+import { extendTheme } from '@chakra-ui/react';
 
 export const theme = extendTheme({
   colors: {
@@ -12,28 +12,34 @@ export const theme = extendTheme({
       600: '#5b5b5b',
       700: '#393939',
       800: '#202020',
-      900: '#171717'
+      900: '#171717',
     },
     orange: {
-      logo: '#ff4800'
-    }
+      logo: '#ff4800',
+    },
   },
   fonts: {
     heading: 'Open Sans, sans-serif',
-    body: 'Open Sans, sans-serif'
+    body: 'Open Sans, sans-serif',
   },
   styles: {
     global: {
-      "*": {
+      '*': {
         _selection: {
-          background: 'orange.200'
-        }
+          background: 'orange.200',
+        },
+      },
+      html: {
+        height: '100%',
       },
       body: {
         height: '100%',
         bg: 'white',
-        color: 'gray.800'
-      }
-    }
-  }
-})
+        color: 'gray.800',
+      },
+      '#__next': {
+        height: '100%',
+      },
+    },
+  },
+});

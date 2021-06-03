@@ -1,115 +1,133 @@
-import Router from "next/router";
-import { createContext, ReactNode, useEffect, useState } from "react";
-import { setCookie, parseCookies, destroyCookie } from 'nookies'
-import { api } from "../services/api";
+import Router from 'next/router';
+import { createContext, ReactNode, useEffect, useState } from 'react';
+import { setCookie, parseCookies, destroyCookie } from 'nookies';
+import { Spinner, Flex } from '@chakra-ui/react';
+import { api } from '../services/api';
 
 type User = {
-  name: string
-  username: string
-}
+  name: string;
+  username: string;
+};
 
 type SignInCredentials = {
   username: string;
   password: string;
-}
+};
 
 type AuthContextData = {
-  signIn: (credentials: SignInCredentials) => Promise<void>
-  signOut: () => void
-  user: User
-  isAuthenticated: boolean
-}
+  signIn: (credentials: SignInCredentials) => Promise<void>;
+  signOut: () => void;
+  user: User;
+  isAuthenticated: boolean;
+};
 
 type AuthProviderProps = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
-export const AuthContext = createContext({} as AuthContextData)
+export const AuthContext = createContext({} as AuthContextData);
 
-let authChannel: BroadcastChannel 
+let authChannel: BroadcastChannel;
 
 export function signOut() {
-  destroyCookie(undefined, 'zf.token')
-  destroyCookie(undefined, 'zf.refreshToken')
+  destroyCookie(undefined, 'zf.token');
+  destroyCookie(undefined, 'zf.refreshToken');
 
-  authChannel.postMessage('signOut')
+  authChannel.postMessage('signOut');
 
-  Router.push('/')
+  Router.push('/');
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User>();
-  const isAuthenticated = !!user
+  const [user, setUser] = useState<User>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const isAuthenticated = !!user;
 
   useEffect(() => {
-    authChannel = new BroadcastChannel('auth')
-    authChannel.onmessage = (message) => {
+    authChannel = new BroadcastChannel('auth');
+    authChannel.onmessage = message => {
       switch (message.data) {
         case 'signOut':
-          signOut()
-          break
+          signOut();
+          break;
         default:
-          break
+          break;
       }
-    }
-  }, [])
+    };
+  }, []);
 
   useEffect(() => {
-    const { 'zf.token': token } = parseCookies()
+    const { 'zf.token': token } = parseCookies();
 
     if (token) {
-      api.get('/me')
-        .then(response => {
-          const { username, name } = response.data
-          setUser({
-            username,
-            name
+      if (Router.pathname === '/') {
+        Router.push('/leagues').then(() => setIsLoading(false));
+      } else {
+        setIsLoading(false);
+        console.log('authcontext chamando api');
+        api
+          .get('/me')
+          .then(response => {
+            const { username, name } = response.data;
+            setUser({
+              username,
+              name,
+            });
           })
-        })
-        .catch(() => {
-          signOut()
-        })
+          .catch(() => {
+            signOut();
+          });
+      }
     } else {
-      Router.push('/')
+      Router.push('/').then(() => setIsLoading(false));
     }
-  }, [])
+  }, []);
 
-  async function signIn({username, password}: SignInCredentials) {
+  async function signIn({ username, password }: SignInCredentials) {
     try {
       const response = await api.post('sessions', {
-      username,
-      password
-      })
+        username,
+        password,
+      });
 
       const { token, refresh_token } = response.data;
 
       setCookie(undefined, 'zf.token', token, {
         maxAge: 60 * 60 * 24 * 30,
-        path: '/'
-      })
+        path: '/',
+      });
 
       setCookie(undefined, 'zf.refreshToken', refresh_token, {
         maxAge: 60 * 60 * 24 * 30,
-        path: '/'
-      })
+        path: '/',
+      });
 
       setUser({
         username,
-        name: response.data.user.name
-      })
+        name: response.data.user.name,
+      });
 
-      api.defaults.headers['Authorization'] = `Bearer ${token}`
+      api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
-      Router.push('/leagues')
-
+      Router.push('/leagues');
     } catch (err) {
-      console.log(err)
+      if (err.response.status === 401 || 403) {
+        throw new Error('Invalid credentials');
+      } else {
+        console.log(err);
+      }
     }
   }
 
   return (
     <AuthContext.Provider value={{ signIn, signOut, isAuthenticated, user }}>
-      {children}
+      {isLoading ? (
+        <Flex align="center" justify="center" flex="1" h="100%">
+          <Spinner size="lg" color="orange.logo" />
+        </Flex>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
-  )
+  );
 }
