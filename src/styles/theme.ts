@@ -19,8 +19,8 @@ export const theme = extendTheme({
     },
   },
   fonts: {
-    heading: 'Open Sans, sans-serif',
-    body: 'Open Sans, sans-serif',
+    heading: '"Source Sans Pro", sans-serif',
+    body: '"Source Sans Pro", sans-serif',
   },
   styles: {
     global: {

@@ -33,7 +33,11 @@ export function signOut() {
   destroyCookie(undefined, 'zf.token');
   destroyCookie(undefined, 'zf.refreshToken');
 
-  authChannel.postMessage('signOut');
+  try {
+    authChannel.postMessage('signOut');
+  } catch {
+    console.log('error on using BroadcastChannel');
+  }
 
   Router.reload();
 }
@@ -44,16 +48,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const isAuthenticated = !!user;
 
   useEffect(() => {
-    authChannel = new BroadcastChannel('auth');
-    authChannel.onmessage = message => {
-      switch (message.data) {
-        case 'signOut':
-          signOut();
-          break;
-        default:
-          break;
-      }
-    };
+    try {
+      authChannel = new BroadcastChannel('auth');
+      authChannel.onmessage = message => {
+        switch (message.data) {
+          case 'signOut':
+            Router.reload();
+            break;
+          default:
+            break;
+        }
+      };
+    } catch {
+      console.log('error on using bradcastChannel');
+    }
   }, []);
 
   useEffect(() => {
@@ -64,7 +72,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         Router.push('/leagues').then(() => setIsLoading(false));
       } else {
         setIsLoading(false);
-        console.log('authcontext chamando api');
         api
           .get('/me')
           .then(response => {
