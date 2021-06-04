@@ -48,7 +48,7 @@ export default function Home() {
         width={['300px', '340px']}
         py="8"
         px={{ base: '4', md: '10' }}
-        boxShadow="0 0 100px 0 rgba(0, 0, 0, 0.7)"
+        boxShadow="0 50px 100px 0 rgba(0, 0, 0, 0.7)"
         rounded={{ sm: 'lg' }}
       >
         <Box w={[140]} mx="auto">

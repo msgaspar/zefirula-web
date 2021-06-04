@@ -36,6 +36,7 @@ export const theme = extendTheme({
         height: '100%',
         bg: 'white',
         color: 'gray.800',
+        overscrollBehaviorY: 'none',
       },
       '#__next': {
         height: '100%',
