@@ -35,7 +35,7 @@ export function signOut() {
 
   authChannel.postMessage('signOut');
 
-  Router.push('/');
+  Router.reload();
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
