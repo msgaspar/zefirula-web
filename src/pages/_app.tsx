@@ -12,7 +12,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ChakraProvider theme={theme}>
       <AuthProvider>
         {/* <SidebarDrawerProvider> */}
-        <Component {...pageProps} />
+        <div>Oi</div>
+        {/* <Component {...pageProps} /> */}
         {/* </SidebarDrawerProvider> */}
       </AuthProvider>
     </ChakraProvider>
