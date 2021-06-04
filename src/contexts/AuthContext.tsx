@@ -33,7 +33,11 @@ export function signOut() {
   destroyCookie(undefined, 'zf.token');
   destroyCookie(undefined, 'zf.refreshToken');
 
-  authChannel.postMessage('signOut');
+  try {
+    authChannel.postMessage('signOut');
+  } catch {
+    console.log('error on using BroadcastChannel');
+  }
 
   Router.reload();
 }
