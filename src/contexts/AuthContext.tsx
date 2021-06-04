@@ -43,18 +43,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const isAuthenticated = !!user;
 
-  // useEffect(() => {
-  //   authChannel = new BroadcastChannel('auth');
-  //   authChannel.onmessage = message => {
-  //     switch (message.data) {
-  //       case 'signOut':
-  //         signOut();
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //   };
-  // }, []);
+  useEffect(() => {
+    try {
+      authChannel = new BroadcastChannel('auth');
+      authChannel.onmessage = message => {
+        switch (message.data) {
+          case 'signOut':
+            Router.reload();
+            break;
+          default:
+            break;
+        }
+      };
+    } catch {
+      console.log('error on using bradcastChannel');
+    }
+  }, []);
 
   useEffect(() => {
     const { 'zf.token': token } = parseCookies();
@@ -64,7 +68,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         Router.push('/leagues').then(() => setIsLoading(false));
       } else {
         setIsLoading(false);
-        console.log('authcontext chamando api');
         api
           .get('/me')
           .then(response => {
