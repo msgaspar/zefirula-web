@@ -10,13 +10,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <ChakraProvider theme={theme}>
-        {/* <AuthProvider> */}
-        <SidebarDrawerProvider>
-          <Component {...pageProps} />
-        </SidebarDrawerProvider>
-        {/* </AuthProvider> */}
+        <AuthProvider>
+          <SidebarDrawerProvider>
+            <Component {...pageProps} />
+          </SidebarDrawerProvider>
+        </AuthProvider>
       </ChakraProvider>
-      //{' '}
     </QueryClientProvider>
   );
 }

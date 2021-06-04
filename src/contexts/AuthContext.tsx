@@ -126,7 +126,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           <Spinner size="lg" color="orange.logo" />
         </Flex>
       ) : (
-        children
+        <div>Oi</div>
+        // children
       )}
     </AuthContext.Provider>
   );
