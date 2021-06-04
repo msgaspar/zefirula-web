@@ -34,7 +34,7 @@ export const theme = extendTheme({
       },
       body: {
         height: '100%',
-        bg: 'gray.800',
+        bg: 'white',
         color: 'gray.800',
       },
       '#__next': {
