@@ -31,7 +31,7 @@ import {
   RiDeleteBin5Line,
   RiDeleteBin7Line,
 } from 'react-icons/ri';
-import { FormInput } from '../../components/Form/FormInput';
+import FormInput from '../../components/Form/FormInput';
 import { useMutation } from 'react-query';
 import { queryClient } from '../../services/queryClient';
 
