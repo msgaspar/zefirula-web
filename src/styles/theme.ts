@@ -19,8 +19,8 @@ export const theme = extendTheme({
     },
   },
   fonts: {
-    heading: 'Open Sans, sans-serif',
-    body: 'Open Sans, sans-serif',
+    heading: '"Source Sans Pro", sans-serif',
+    body: '"Source Sans Pro", sans-serif',
   },
   styles: {
     global: {
@@ -34,9 +34,8 @@ export const theme = extendTheme({
       },
       body: {
         height: '100%',
-        bg: 'white',
+        bg: 'gray.800',
         color: 'gray.800',
-        overflow: 'hidden',
       },
       '#__next': {
         height: '100%',

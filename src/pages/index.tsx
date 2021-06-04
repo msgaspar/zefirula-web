@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Flex, Stack, Image, Box, AbsoluteCenter } from '@chakra-ui/react';
+import { Flex, Stack, Image, Box } from '@chakra-ui/react';
 import LoginForm from '../components/Form/LoginForm';
 
 export default function Home() {
