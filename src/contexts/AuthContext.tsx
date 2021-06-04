@@ -43,18 +43,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const isAuthenticated = !!user;
 
-  useEffect(() => {
-    authChannel = new BroadcastChannel('auth');
-    authChannel.onmessage = message => {
-      switch (message.data) {
-        case 'signOut':
-          signOut();
-          break;
-        default:
-          break;
-      }
-    };
-  }, []);
+  // useEffect(() => {
+  //   authChannel = new BroadcastChannel('auth');
+  //   authChannel.onmessage = message => {
+  //     switch (message.data) {
+  //       case 'signOut':
+  //         signOut();
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   };
+  // }, []);
 
   useEffect(() => {
     const { 'zf.token': token } = parseCookies();
@@ -126,8 +126,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           <Spinner size="lg" color="orange.logo" />
         </Flex>
       ) : (
-        <div>Oi</div>
-        // children
+        children
       )}
     </AuthContext.Provider>
   );
