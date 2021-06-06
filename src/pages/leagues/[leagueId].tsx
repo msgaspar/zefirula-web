@@ -17,11 +17,10 @@ import {
   Tbody,
   Tr,
   Image,
-  Avatar,
+  Select,
 } from '@chakra-ui/react';
 import Header from '../../components/Header';
 import { Sidebar } from '../../components/Sidebar';
-import Link from 'next/link';
 import {
   RiAddLine,
   RiDeleteBack2Line,
@@ -38,12 +37,14 @@ import { queryClient } from '../../services/queryClient';
 function League() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
+  const [round, setRound] = useState(-1);
   const [isAddingClub, setIsAddingClub] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [leagueData, setLeagueData] = useState({
     id: '',
     name: '',
-    round: '',
+    round: 0,
+    lastRound: 0,
     clubs: [],
   });
 
@@ -97,16 +98,29 @@ function League() {
     };
   };
 
+  const handleSelectRound = e => {
+    setRound(e.target.value);
+  };
+
   useEffect(() => {
     if (router.query.leagueId) {
+      const path =
+        round === -1
+          ? `leagues/${router.query.leagueId}`
+          : `leagues/${router.query.leagueId}/${round}`;
       api
-        .get(`leagues/${router.query.leagueId}`)
-        .then(response =>
-          setLeagueData({ id: router.query.leagueId, ...response.data })
-        )
+        .get(path)
+        .then(response => {
+          setLeagueData({ id: router.query.leagueId, ...response.data });
+        })
         .then(() => setIsLoading(false));
     }
-  }, [router.query]);
+  }, [router.query, round]);
+
+  const rounds = [];
+  for (let i = 1; i <= leagueData.lastRound; i += 1) {
+    rounds.push(i);
+  }
 
   return (
     <Flex direction="column" minHeight="100vh" bg="gray.50">
@@ -130,27 +144,45 @@ function League() {
             align={['flex-start', 'center']}
             direction={['column', 'row']}
           >
-            <Stack>
-              <Heading as="h1" size="lg" fontWeight="600" my={[6, 6, 8, 0]}>
-                {leagueData.name}
-              </Heading>
-              <Heading
-                as="h2"
-                color="orange.logo"
-                size="sm"
-                fontWeight="400"
-                my={[6, 6, 8, 0]}
-              >
-                Rodada {leagueData.round}
-              </Heading>
-            </Stack>
-            <Button
-              colorScheme="teal"
-              onClick={addClub}
-              leftIcon={<Icon as={RiAddLine} fontSize="20" />}
-            >
-              Adicionar time
-            </Button>
+            {!isLoading && (
+              <>
+                <Stack>
+                  <Heading as="h1" size="lg" fontWeight="600" my={[6, 6, 8, 0]}>
+                    {leagueData.name}
+                  </Heading>
+                  <Select
+                    onChange={handleSelectRound}
+                    value={round}
+                    variant="filled"
+                    width="fit-content"
+                    bg="transparent"
+                    color="gray.600"
+                    border="1px"
+                    borderRadius={0}
+                    borderColor="gray.200"
+                    focusBorderColor="orange.200"
+                  >
+                    {rounds.map(roundNumber => (
+                      <option
+                        style={{ color: 'black' }}
+                        key={roundNumber}
+                        value={roundNumber}
+                      >
+                        Rodada {roundNumber}
+                      </option>
+                    ))}
+                  </Select>
+                </Stack>
+                <Button
+                  colorScheme="teal"
+                  borderRadius={0}
+                  onClick={addClub}
+                  leftIcon={<Icon as={RiAddLine} fontSize="20" />}
+                >
+                  Adicionar time
+                </Button>
+              </>
+            )}
           </Flex>
 
           <Flex
@@ -163,7 +195,7 @@ function League() {
           >
             {isLoading ? (
               <Flex justify="center" h="100%" align="center">
-                <Spinner />
+                <Spinner color="orange.logo" />
               </Flex>
             ) : isAddingClub ? (
               <>
@@ -174,6 +206,7 @@ function League() {
                     borderColor="gray.300"
                   />
                 </Box>
+
                 <Table mt="5">
                   <Thead>
                     <Tr>
@@ -201,79 +234,81 @@ function League() {
                 </Table>
               </>
             ) : (
-              <Box flex="1" w="100%" overflowX="auto" whiteSpace="nowrap">
-                <Table colorScheme="blackAlpha" fontSize={['xs', 'sm']}>
-                  <Thead>
-                    <Tr>
-                      <Th></Th>
-                      <Th>Nome</Th>
-                      <Th>Cartoleiro</Th>
-                      <Th>ID</Th>
-                      <Th>Pontos</Th>
-                      <Th>Pontos s/ capitão</Th>
-                      <Th></Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {leagueData.clubs.map(club => {
-                      return (
-                        <Tr borderLeft="5px solid white" key={club.id}>
-                          <Td p="0">
-                            <Image
-                              boxSize="28px"
-                              src={club.badgeImgUrl}
-                              userSelect="none"
-                            />
-                          </Td>
-                          <Td>
-                            <Text fontWeight="600">{club.name}</Text>
-                          </Td>
-                          <Td>
-                            <Text fontWeight="400">{club.cartoleiro}</Text>
-                          </Td>
-                          <Td>
-                            <Text fontWeight="400">{club.id}</Text>
-                          </Td>
-                          <Td>
-                            <Text fontWeight="400">
-                              {Number(club.score).toLocaleString('pt-br')}
-                            </Text>
-                          </Td>
-                          <Td>
-                            <Text fontWeight="400">
-                              {Number(
-                                club.score - club.captain_score
-                              ).toLocaleString('pt-br')}
-                            </Text>
-                          </Td>
-                          <Td>
-                            <Icon
-                              as={RiDeleteBin2Line}
-                              onClick={handleRemoveClub(club.id)}
-                              fontSize="18"
-                              _hover={{
-                                cursor: 'pointer',
-                              }}
-                              color="red.500"
-                            />
-                          </Td>
-                        </Tr>
-                      );
-                    })}
-                  </Tbody>
-                </Table>
-              </Box>
-            )}
-            {!isAddingClub && (
-              <Button
-                colorScheme="red"
-                variant="outline"
-                alignSelf="flex-end"
-                onClick={handleDeleteLeague(leagueData.id)}
-                leftIcon={<Icon as={RiDeleteBin7Line} fontSize="20" />}
-              >
-                Excluir liga
-              </Button>
+              <>
+                <Box flex="1" w="100%" overflowX="auto" whiteSpace="nowrap">
+                  <Table colorScheme="blackAlpha" fontSize={['xs', 'sm']}>
+                    <Thead>
+                      <Tr>
+                        <Th></Th>
+                        <Th>Nome</Th>
+                        <Th>Cartoleiro</Th>
+                        <Th>ID</Th>
+                        <Th>Pontos</Th>
+                        <Th>Pontos s/ capitão</Th>
+                        <Th></Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {leagueData.clubs.map(club => {
+                        return (
+                          <Tr borderLeft="5px solid white" key={club.id}>
+                            <Td p="0">
+                              <Image
+                                boxSize="28px"
+                                src={club.badgeImgUrl}
+                                userSelect="none"
+                              />
+                            </Td>
+                            <Td>
+                              <Text fontWeight="600">{club.name}</Text>
+                            </Td>
+                            <Td>
+                              <Text fontWeight="400">{club.cartoleiro}</Text>
+                            </Td>
+                            <Td>
+                              <Text fontWeight="400">{club.id}</Text>
+                            </Td>
+                            <Td>
+                              <Text fontWeight="400">
+                                {Number(club.score).toLocaleString('pt-br')}
+                              </Text>
+                            </Td>
+                            <Td>
+                              <Text fontWeight="400">
+                                {Number(
+                                  club.score - club.captain_score
+                                ).toLocaleString('pt-br')}
+                              </Text>
+                            </Td>
+                            <Td>
+                              <Icon
+                                as={RiDeleteBin2Line}
+                                onClick={handleRemoveClub(club.id)}
+                                fontSize="18"
+                                _hover={{
+                                  cursor: 'pointer',
+                                }}
+                                color="red.500"
+                              />
+                            </Td>
+                          </Tr>
+                        );
+                      })}
+                    </Tbody>
+                  </Table>
+                </Box>
+                <Button
+                  colorScheme="red"
+                  borderRadius={0}
+                  marginTop="36px"
+                  variant="outline"
+                  alignSelf="flex-end"
+                  onClick={handleDeleteLeague(leagueData.id)}
+                  leftIcon={<Icon as={RiDeleteBin7Line} fontSize="20" />}
+                >
+                  Excluir liga
+                </Button>
+              </>
             )}
           </Flex>
         </Flex>
