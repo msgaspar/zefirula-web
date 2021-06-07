@@ -40,6 +40,9 @@ export const theme = extendTheme({
       '#__next': {
         height: '100%',
       },
+      '.js-focus-visible :focus:not(.focus-visible)': {
+        outline: 'none',
+      },
     },
   },
 });

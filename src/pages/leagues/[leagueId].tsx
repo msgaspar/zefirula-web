@@ -29,6 +29,7 @@ import {
   RiDeleteBin2Line,
   RiDeleteBin7Line,
   RiDownloadFill,
+  RiCloseLine,
 } from 'react-icons/ri';
 import FormInput from '../../components/Form/FormInput';
 import { useMutation } from 'react-query';
@@ -78,8 +79,8 @@ function League() {
       .then(response => setSearchResults([...response.data]));
   };
 
-  const addClub = () => {
-    setIsAddingClub(true);
+  const toggleAddClub = () => {
+    isAddingClub ? setIsAddingClub(false) : setIsAddingClub(true);
   };
 
   const handleAddClub = (id: string) => {
@@ -163,7 +164,7 @@ function League() {
                       border="1px"
                       borderRadius={0}
                       borderColor="gray.200"
-                      focusBorderColor="orange.200"
+                      focusBorderColor="gray.200"
                     >
                       {rounds.map(roundNumber => (
                         <option
@@ -214,14 +215,26 @@ function League() {
                     </CSVLink>
                   </HStack>
                 </Stack>
-                <Button
-                  colorScheme="teal"
-                  borderRadius={0}
-                  onClick={addClub}
-                  leftIcon={<Icon as={RiAddLine} fontSize="20" />}
-                >
-                  Adicionar time
-                </Button>
+                {isAddingClub ? (
+                  <Button
+                    colorScheme="gray"
+                    bg="gray.300"
+                    borderRadius={0}
+                    onClick={toggleAddClub}
+                    leftIcon={<Icon as={RiCloseLine} fontSize="20" />}
+                  >
+                    Cancelar
+                  </Button>
+                ) : (
+                  <Button
+                    colorScheme="teal"
+                    borderRadius={0}
+                    onClick={toggleAddClub}
+                    leftIcon={<Icon as={RiAddLine} fontSize="20" />}
+                  >
+                    Adicionar time
+                  </Button>
+                )}
               </Flex>
             </>
           )}
