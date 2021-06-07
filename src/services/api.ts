@@ -8,6 +8,7 @@ let failedRequestsQueue = [];
 
 export const api = axios.create({
   baseURL: 'https://zefirula.mgaspar.dev',
+  // baseURL: 'http://localhost:3333',
   headers: {
     Authorization: `Bearer ${cookies['zf.token']}`,
   },

@@ -62,6 +62,7 @@ export default function LeagueList() {
               <Button
                 as="a"
                 colorScheme="teal"
+                borderRadius={0}
                 leftIcon={<Icon as={RiAddLine} fontSize="20" />}
               >
                 Criar nova

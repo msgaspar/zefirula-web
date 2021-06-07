@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { CSVLink } from 'react-csv';
 import { api } from '../../services/api';
 import {
   Button,
@@ -18,17 +19,16 @@ import {
   Tr,
   Image,
   Select,
+  IconButton,
+  HStack,
 } from '@chakra-ui/react';
 import Header from '../../components/Header';
 import { Sidebar } from '../../components/Sidebar';
 import {
   RiAddLine,
-  RiDeleteBack2Line,
   RiDeleteBin2Line,
-  RiDeleteBin3Line,
-  RiDeleteBin4Line,
-  RiDeleteBin5Line,
   RiDeleteBin7Line,
+  RiDownloadFill,
 } from 'react-icons/ri';
 import FormInput from '../../components/Form/FormInput';
 import { useMutation } from 'react-query';
@@ -111,6 +111,7 @@ function League() {
       api
         .get(path)
         .then(response => {
+          setRound(response.data.round);
           setLeagueData({ id: router.query.leagueId, ...response.data });
         })
         .then(() => setIsLoading(false));
@@ -137,41 +138,81 @@ function League() {
         <Sidebar />
 
         <Flex direction="column" flex="1" w="100%">
-          <Flex
-            px={['6', '8']}
-            mb="8"
-            justify="space-between"
-            align={['flex-start', 'center']}
-            direction={['column', 'row']}
-          >
-            {!isLoading && (
-              <>
+          {!isLoading && (
+            <>
+              <Heading as="h1" size="xl" fontWeight="600" ml={8} mt={8}>
+                {leagueData.name}
+              </Heading>
+              <Flex
+                px={8}
+                my={8}
+                justify="space-between"
+                align={['flex-start', 'center']}
+                direction={['column', 'row']}
+              >
                 <Stack>
-                  <Heading as="h1" size="lg" fontWeight="600" my={[6, 6, 8, 0]}>
-                    {leagueData.name}
-                  </Heading>
-                  <Select
-                    onChange={handleSelectRound}
-                    value={round}
-                    variant="filled"
-                    width="fit-content"
-                    bg="transparent"
-                    color="gray.600"
-                    border="1px"
-                    borderRadius={0}
-                    borderColor="gray.200"
-                    focusBorderColor="orange.200"
-                  >
-                    {rounds.map(roundNumber => (
-                      <option
-                        style={{ color: 'black' }}
-                        key={roundNumber}
-                        value={roundNumber}
-                      >
-                        Rodada {roundNumber}
-                      </option>
-                    ))}
-                  </Select>
+                  <HStack spacing={2}>
+                    <Select
+                      title="Selecionar rodada"
+                      onChange={handleSelectRound}
+                      value={round}
+                      variant="filled"
+                      width="fit-content"
+                      bg="transparent"
+                      color="gray.700"
+                      border="1px"
+                      borderRadius={0}
+                      borderColor="gray.200"
+                      focusBorderColor="orange.200"
+                    >
+                      {rounds.map(roundNumber => (
+                        <option
+                          style={{ color: 'black' }}
+                          key={roundNumber}
+                          value={roundNumber}
+                        >
+                          Rodada {roundNumber}
+                        </option>
+                      ))}
+                    </Select>
+
+                    <CSVLink
+                      title="Download .csv"
+                      filename={`${leagueData.name.replace(
+                        /\s/g,
+                        ''
+                      )}-rodada${round}.csv`}
+                      headers={[
+                        { label: 'ID', key: 'id' },
+                        { label: 'Equipe', key: 'name' },
+                        { label: 'Cartoleiro', key: 'cartoleiro' },
+                        { label: 'Pontos', key: 'score' },
+                        {
+                          label: 'Pontos sem capitão',
+                          key: 'scoreWithoutCaptain',
+                        },
+                      ]}
+                      data={leagueData.clubs.map(club => ({
+                        id: club.id,
+                        name: club.name,
+                        cartoleiro: club.cartoleiro,
+                        score: Number(club.score).toLocaleString('pt-br'),
+                        scoreWithoutCaptain: Number(
+                          club.score - club.captain_score
+                        ).toLocaleString('pt-br'),
+                      }))}
+                    >
+                      <IconButton
+                        aria-label="download csv"
+                        border="1px"
+                        borderColor="gray.200"
+                        color="gray.700"
+                        bg="transparent"
+                        borderRadius={0}
+                        icon={<Icon as={RiDownloadFill} />}
+                      />
+                    </CSVLink>
+                  </HStack>
                 </Stack>
                 <Button
                   colorScheme="teal"
@@ -181,9 +222,9 @@ function League() {
                 >
                   Adicionar time
                 </Button>
-              </>
-            )}
-          </Flex>
+              </Flex>
+            </>
+          )}
 
           <Flex
             direction="column"
@@ -239,22 +280,23 @@ function League() {
                   <Table colorScheme="blackAlpha" fontSize={['xs', 'sm']}>
                     <Thead>
                       <Tr>
-                        <Th></Th>
+                        <Th w={0}></Th>
                         <Th>Nome</Th>
                         <Th>Cartoleiro</Th>
                         <Th>ID</Th>
                         <Th>Pontos</Th>
                         <Th>Pontos s/ capitão</Th>
-                        <Th></Th>
+                        <Th w={0}></Th>
                       </Tr>
                     </Thead>
                     <Tbody>
                       {leagueData.clubs.map(club => {
                         return (
                           <Tr borderLeft="5px solid white" key={club.id}>
-                            <Td p="0">
+                            <Td p={0}>
                               <Image
                                 boxSize="28px"
+                                mx="auto"
                                 src={club.badgeImgUrl}
                                 userSelect="none"
                               />
@@ -280,7 +322,7 @@ function League() {
                                 ).toLocaleString('pt-br')}
                               </Text>
                             </Td>
-                            <Td>
+                            <Td p={0} textAlign="center">
                               <Icon
                                 as={RiDeleteBin2Line}
                                 onClick={handleRemoveClub(club.id)}
