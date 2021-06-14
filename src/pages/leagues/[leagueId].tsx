@@ -202,6 +202,7 @@ function League() {
                           club.score - club.captain_score
                         ).toLocaleString('pt-br'),
                       }))}
+                      separator={';'}
                     >
                       <IconButton
                         aria-label="download csv"
