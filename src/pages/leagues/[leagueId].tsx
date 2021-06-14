@@ -76,7 +76,15 @@ function League() {
           q,
         },
       })
-      .then(response => setSearchResults([...response.data]));
+      .then(response => {
+        const bestResult = response.data.filter(club =>
+          club.name.toLowerCase().includes(q.toLowerCase())
+        );
+        const otherResults = response.data.filter(
+          club => !bestResult.includes(club)
+        );
+        setSearchResults([...bestResult, ...otherResults]);
+      });
   };
 
   const toggleAddClub = () => {
@@ -85,6 +93,8 @@ function League() {
 
   const handleAddClub = (id: string) => {
     return () => {
+      setIsAddingClub(false);
+      setIsLoading(true);
       api
         .post(`leagues/${leagueData.id}`, {
           clubId: String(id),
@@ -95,11 +105,15 @@ function League() {
 
   const handleRemoveClub = (id: string) => {
     return () => {
-      api.delete(`leagues/${leagueData.id}/${id}`).then(() => router.reload());
+      const data = { ...leagueData };
+      data.clubs = data.clubs.filter(club => club.id !== id);
+      setLeagueData(data);
+      api.delete(`leagues/${leagueData.id}/${id}`).catch(() => router.reload());
     };
   };
 
   const handleSelectRound = e => {
+    setIsLoading(true);
     setRound(e.target.value);
   };
 
@@ -231,7 +245,7 @@ function League() {
                     colorScheme="teal"
                     borderRadius={0}
                     onClick={toggleAddClub}
-                    leftIcon={<Icon as={RiAddLine} fontSize="20" />}
+                    leftIcon={<Icon as={RiAddLine} fontSize="21" />}
                   >
                     Adicionar time
                   </Button>
@@ -326,14 +340,18 @@ function League() {
                             </Td>
                             <Td>
                               <Text fontWeight="400">
-                                {Number(club.score).toLocaleString('pt-br')}
+                                {Number(club.score).toLocaleString('pt-br', {
+                                  minimumFractionDigits: 2,
+                                })}
                               </Text>
                             </Td>
                             <Td>
                               <Text fontWeight="400">
                                 {Number(
                                   club.score - club.captain_score
-                                ).toLocaleString('pt-br')}
+                                ).toLocaleString('pt-br', {
+                                  minimumFractionDigits: 2,
+                                })}
                               </Text>
                             </Td>
                             <Td p={0} textAlign="center">
