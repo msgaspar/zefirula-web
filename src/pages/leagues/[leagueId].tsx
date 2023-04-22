@@ -348,7 +348,7 @@ function League() {
                             <Td>
                               <Text fontWeight="400">
                                 {Number(
-                                  club.score - club.captain_score
+                                  club.score - club.captain_score / 2
                                 ).toLocaleString('pt-br', {
                                   minimumFractionDigits: 2,
                                 })}
