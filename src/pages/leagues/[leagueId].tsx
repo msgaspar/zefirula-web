@@ -213,7 +213,7 @@ function League() {
                         cartoleiro: club.cartoleiro,
                         score: Number(club.score).toLocaleString('pt-br'),
                         scoreWithoutCaptain: Number(
-                          club.score - club.captain_score
+                          club.score - 0.5 * club.captain_score
                         ).toLocaleString('pt-br'),
                       }))}
                       separator={';'}
